@@ -16,7 +16,7 @@ export default function Section({
   } else if (bgColor === 1) {
     return (
       <div
-        className={`bg-linen p-8 flex flex-col gap-[2rem] items-center justify-center text-xl font-bold`}
+        className={`bg-linen text-black p-8 flex flex-col gap-[2rem] items-center justify-center text-xl font-bold`}
       >
         {children}
       </div>

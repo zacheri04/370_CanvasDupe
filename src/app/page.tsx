@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Section from "@/components/section";
+import { CustomButton } from "@/components/CustomButton";
 
 const fetchData = async (query: string) => {
   try {
@@ -37,13 +38,48 @@ export default function Home() {
     <>
       <Section bgColor={1}>
         <p className="text-5xl">Import Data</p>
-        <input
-          type="file"
-          accept=".csv"
-          onChange={handleFileUpload}
-          className="text-lg"
-        />
-        <p>{csvContent}</p>
+
+        {/* Import into the People table */}
+        <div className="flex flex-col items-center">
+          <p className="text-3xl">Import People</p>
+          <label className="custom-file-upload">
+            <input
+              type="file"
+              className="hidden"
+              accept=".csv"
+              onChange={handleFileUpload}
+            />
+            <CustomButton label="Upload People Entries" />
+          </label>
+        </div>
+
+        {/* Import into the Course table */}
+        <div className="flex flex-col items-center">
+          <p className="text-3xl">Import Courses</p>
+          <label className="custom-file-upload">
+            <input
+              type="file"
+              className="hidden"
+              accept=".csv"
+              onChange={handleFileUpload}
+            />
+            <CustomButton label="Upload Course Entries" />
+          </label>
+        </div>
+
+        {/* Import into the StudentCourse table */}
+        <div className="flex flex-col items-center">
+          <p className="text-3xl">Import Enrollment</p>
+          <label className="custom-file-upload">
+            <input
+              type="file"
+              className="hidden"
+              accept=".csv"
+              onChange={handleFileUpload}
+            />
+            <CustomButton label="Upload Enrollment Data" />
+          </label>
+        </div>
       </Section>
     </>
   );
