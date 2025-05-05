@@ -19,20 +19,30 @@ export default function Home() {
   const [csvContent, setCsvContent] = useState<string[][] | null>(null);
 
   const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
+    targetTable: string
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
-    const text = await file.text();
-    const rows = text.split("\n").map((row) => row.split(","));
-    setCsvContent(rows);
-
-    // Example: Construct a query using first row of CSV
-    const queryParam = encodeURIComponent(rows[0].join(","));
-    const query = `/api/fetch?data=${queryParam}`;
-    await fetchData(query);
+  
+    const formData = new FormData();
+    formData.append("csvfile", file);
+    formData.append("targetTable", targetTable);
+  
+    try {
+      const res = await fetch("/api/upload-csv", {
+        method: "POST",
+        body: formData,
+      });
+  
+      const result = await res.json();
+      alert(result.message || result.error || "Upload complete");
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("Upload failed");
+    }
   };
+  
 
   return (
     <>
@@ -47,11 +57,12 @@ export default function Home() {
               type="file"
               className="hidden"
               accept=".csv"
-              onChange={handleFileUpload}
+              onChange={(e) => handleFileUpload(e, "Person")}
             />
             <CustomButton label="Upload People Entries" />
           </label>
         </div>
+
 
         {/* Import into the Course table */}
         <div className="flex flex-col items-center">
@@ -61,7 +72,7 @@ export default function Home() {
               type="file"
               className="hidden"
               accept=".csv"
-              onChange={handleFileUpload}
+              onChange={(e) => handleFileUpload(e, "Course")}
             />
             <CustomButton label="Upload Course Entries" />
           </label>
@@ -75,7 +86,7 @@ export default function Home() {
               type="file"
               className="hidden"
               accept=".csv"
-              onChange={handleFileUpload}
+              onChange={(e) => handleFileUpload(e, "StudentCourse")}
             />
             <CustomButton label="Upload Enrollment Data" />
           </label>
