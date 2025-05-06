@@ -5,6 +5,18 @@ from random import choice
 fake = Faker()
 
 def generate_university_csv(file_path: str, num_rows: int):
+    emails = set()
+
+    def get_unique_email(first, last, domain="bradley.edu"):
+        base = f"{first.lower()}.{last.lower()}"
+        email = f"{base}@{domain}"
+        counter = 1
+        while email in emails:
+            email = f"{base}{counter}@{domain}"
+            counter += 1
+        emails.add(email)
+        return email
+
     with open(file_path, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow([
@@ -16,7 +28,7 @@ def generate_university_csv(file_path: str, num_rows: int):
             first_name = fake.first_name_male() if gender == "M" else fake.first_name_female()
             last_name = fake.last_name()
             perf_name = first_name
-            email = f"{first_name.lower()}.{last_name.lower()}@example.edu"
+            email = get_unique_email(first_name, last_name)
             password = fake.password(length=12)
 
             writer.writerow([
@@ -31,5 +43,4 @@ def generate_university_csv(file_path: str, num_rows: int):
 
     print(f"Created file: {file_path} with {num_rows} rows.")
 
-# Generate 10,000 users
-generate_university_csv("students.csv", 10000)
+generate_university_csv("person.csv", 10000)

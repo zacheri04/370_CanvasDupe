@@ -1,0 +1,6 @@
+Course_id,University_id,Name,Description,Course_no,Section_no,Department_id
+1,370,Database Management Systems,Intro to RDBMS systems,370,01,1
+2,325,Probability & Statistics,Intro to probability & statistics,325,01,2
+3,390,Database Management Systems,Intro to RDBMS systems,370,02,1
+4,101,Do Nothing Honors Seminar,Honors program exclusive,101,40,3
+5,122,Multivariable Calculus,Integrals... in 3D!,122,01,2

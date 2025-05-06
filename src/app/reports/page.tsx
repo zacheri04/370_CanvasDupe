@@ -197,7 +197,7 @@ export default function Reports() {
               setTableNum(1);
             }}
           >
-            <CustomButton label="Get People" />
+            <CustomButton label="Get Registration" />
           </button>
 
           {/* Generates a report on the Courses */}

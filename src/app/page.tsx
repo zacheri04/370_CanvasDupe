@@ -18,31 +18,31 @@ const fetchData = async (query: string) => {
 export default function Home() {
   const [csvContent, setCsvContent] = useState<string[][] | null>(null);
 
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-    targetTable: string
-  ) => {
-    const file = event.target.files?.[0];
+  const handleFileUpload = async (e: any, targetTable: any) => {
+    const file = e.target.files[0];
     if (!file) return;
-  
+
     const formData = new FormData();
-    formData.append("csvfile", file);
+    formData.append("csvfile", file); // field name must match server
     formData.append("targetTable", targetTable);
-  
+
     try {
-      const res = await fetch("/api/upload-csv", {
+      const res = await fetch("/api/imports", {
         method: "POST",
         body: formData,
       });
-  
+
       const result = await res.json();
-      alert(result.message || result.error || "Upload complete");
+      if (res.ok) {
+        alert("Upload successful: " + result.message);
+      } else {
+        alert("Upload failed: " + result.error);
+      }
     } catch (err) {
-      console.error("Upload failed:", err);
-      alert("Upload failed");
+      console.error("Upload error:", err);
+      alert("Something went wrong.");
     }
   };
-  
 
   return (
     <>
@@ -63,7 +63,6 @@ export default function Home() {
           </label>
         </div>
 
-
         {/* Import into the Course table */}
         <div className="flex flex-col items-center">
           <p className="text-3xl">Import Courses</p>
@@ -78,9 +77,23 @@ export default function Home() {
           </label>
         </div>
 
+        {/* Import into the Grade table */}
+        <div className="flex flex-col items-center">
+          <p className="text-3xl">Import Grades</p>
+          <label className="custom-file-upload">
+            <input
+              type="file"
+              className="hidden"
+              accept=".csv"
+              onChange={(e) => handleFileUpload(e, "Grade")}
+            />
+            <CustomButton label="Upload Course Entries" />
+          </label>
+        </div>
+
         {/* Import into the StudentCourse table */}
         <div className="flex flex-col items-center">
-          <p className="text-3xl">Import Enrollment</p>
+          <p className="text-3xl">Import Registration</p>
           <label className="custom-file-upload">
             <input
               type="file"
@@ -88,9 +101,19 @@ export default function Home() {
               accept=".csv"
               onChange={(e) => handleFileUpload(e, "StudentCourse")}
             />
-            <CustomButton label="Upload Enrollment Data" />
+            <CustomButton label="Upload Registration Data" />
           </label>
         </div>
+
+        {/* Reset Button */}
+        <button
+          onClick={async () => {
+            const result = await fetchData("/api/reset");
+            alert(result);
+          }}
+        >
+          <CustomButton label="Reset Tables" />
+        </button>
       </Section>
     </>
   );
